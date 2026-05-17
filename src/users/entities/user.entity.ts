@@ -12,6 +12,9 @@ export class UserEntity {
   @Column()
   email!:string;
 
+  @Column()
+  password!:string;
+
   @Column({type:'enum', enum:Roles, array:true, default:[Roles.USER]})
   roles!:Roles
 }
