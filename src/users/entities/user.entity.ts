@@ -1,4 +1,4 @@
-import { Roles } from "src/utility/common/user-roles.enum";
+import { RolesEnum } from "src/utility/common/user-roles.enum";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
 @Entity("users")
@@ -15,8 +15,8 @@ export class UserEntity {
   @Column({select:false})
   password!:string;
 
-  @Column({type:'enum', enum:Roles, array:true, default:[Roles.USER]})
-  roles!:Roles
+  @Column({type:'enum', enum:RolesEnum, array:true, default:[RolesEnum.USER]})
+  roles!:RolesEnum
 
   @CreateDateColumn()
   createdAt!: Timestamp;
