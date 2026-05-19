@@ -50,7 +50,7 @@ export class UsersService {
 
   async accessToken(user:UserEntity):Promise<string> {
     const {id, email} = user;
-    const expiresIn = '1h';
+    const expiresIn = '24h';
     const jwtSecret = process.env.JWT_SECRET!;
     return sign({id, email}, jwtSecret, {expiresIn: expiresIn});
   }
