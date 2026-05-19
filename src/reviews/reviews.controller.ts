@@ -1,30 +1,36 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
+import { CurrentUser } from 'src/utility/decorators/current-user.decorator';
+import { UserEntity } from 'src/users/entities/user.entity';
+import { RolesEnum } from 'src/utility/common/user-roles.enum';
+import { RoleGuard } from 'src/utility/guards/role.guard';
+import { ReviewEntity } from './entities/review.entity';
 
 @Controller('reviews')
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
+  @UseGuards(RoleGuard(RolesEnum.ADMIN, RolesEnum.USER))
   @Post()
-  create(@Body() createReviewDto: CreateReviewDto) {
-    return this.reviewsService.create(createReviewDto);
+  async create(@Body() body: CreateReviewDto, @CurrentUser() user: UserEntity): Promise<ReviewEntity> {
+    return await this.reviewsService.create(body, user);
   }
 
   @Get()
-  findAll() {
-    return this.reviewsService.findAll();
+  async findAll(): Promise<ReviewEntity[]> {
+    return await this.reviewsService.findAll();
+  }
+
+  @Get("by-product")
+  async findAllByProduct(@Body('productId') productId: number): Promise<ReviewEntity[]> {
+    return await this.reviewsService.findAllByProduct(productId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.reviewsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateReviewDto: UpdateReviewDto) {
-    return this.reviewsService.update(+id, updateReviewDto);
+  async findOne(@Param('id') id: string): Promise<ReviewEntity | null> {
+    return await this.reviewsService.findOne(+id);
   }
 
   @Delete(':id')
