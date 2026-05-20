@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -8,10 +8,11 @@ import { UserEntity } from 'src/users/entities/user.entity';
 import { CategoriesService } from 'src/categories/categories.service';
 import { OrderStatusEnum } from 'src/orders/enums/order-status.enum';
 import dataSource from 'db/data-source';
+import { OrdersService } from 'src/orders/orders.service';
 
 @Injectable()
 export class ProductsService {
-  constructor(@InjectRepository(ProductEntity) private readonly productRepository: Repository<ProductEntity>, private readonly categoryService: CategoriesService) {}
+  constructor(@InjectRepository(ProductEntity) private readonly productRepository: Repository<ProductEntity>, private readonly categoryService: CategoriesService, private readonly ordersService: OrdersService) {}
 
   async create(body: CreateProductDto, user: UserEntity): Promise<ProductEntity> {
     const category = await this.categoryService.findOne(+body.categoryId);
@@ -112,8 +113,13 @@ export class ProductsService {
     return await this.productRepository.save(product);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: number) {
+    const product = await this.findOne(id);
+    const order = await this.ordersService.findOneByProductId(id);
+    if(order){
+      throw new BadRequestException('Product is in an order');
+    }
+    return await this.productRepository.remove(product);
   }
 
   async updateStock(id:number, stock:number, status:string){

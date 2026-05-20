@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { UserEntity } from 'src/users/entities/user.entity';
@@ -14,7 +14,7 @@ import { OrderStatusEnum } from './enums/order-status.enum';
 
 @Injectable()
 export class OrdersService {
-  constructor(@InjectRepository(OrderEntity) private orderRepository: Repository<OrderEntity>, @InjectRepository(OrderProductsEntity) private orderProductsRepository: Repository<OrderProductsEntity>, private readonly productsService: ProductsService) { }
+  constructor(@InjectRepository(OrderEntity) private orderRepository: Repository<OrderEntity>, @InjectRepository(OrderProductsEntity) private orderProductsRepository: Repository<OrderProductsEntity>, @Inject(forwardRef(() => ProductsService)) private readonly productsService: ProductsService) { }
 
   async create(body: CreateOrderDto, user: UserEntity) {
     const shippingEntity = new ShippingEntity();
@@ -73,6 +73,13 @@ export class OrdersService {
           product: true
         }
       }
+    })
+  }
+
+  async findOneByProductId(id: number) {
+    return await this.orderRepository.findOne({
+      relations:{products:true},
+      where:{products:{id}},
     })
   }
 
