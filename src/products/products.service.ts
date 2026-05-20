@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { CategoriesService } from 'src/categories/categories.service';
 import { OrderStatusEnum } from 'src/orders/enums/order-status.enum';
+import dataSource from 'db/data-source';
 
 @Injectable()
 export class ProductsService {
@@ -24,8 +25,51 @@ export class ProductsService {
     return product;
   }
  
-  async findAll():Promise<ProductEntity[]> {
-    return this.productRepository.find()
+  async findAll(query:any):Promise<any> {
+    let filteredTotalProducts:number = 0;
+    let limit:number = query.limit || 10;
+
+    const queryBuilder = dataSource
+      .getRepository(ProductEntity)
+      .createQueryBuilder('products')
+      .leftJoinAndSelect('products.category', 'category')
+      .leftJoin('products.reviews', 'review')
+      .addSelect([
+        'COUNT(review.id) AS reviewCount',
+        'AVG(review.ratings)::numeric(10,2) AS avgRating'
+      ])
+      .groupBy('products.id, category.id')
+
+    // const totalProducts = await queryBuilder.getCount();
+    if(query.search){
+      queryBuilder.andWhere('products.title ILIKE :title', {title: `%${query.search}%`});
+    }
+
+    if(query.category){
+      queryBuilder.andWhere('category.id = :category', {category: query.category});
+    }
+
+    if(query.minPrice){
+      queryBuilder.andWhere('products.price >= :minPrice', {minPrice: query.minPrice});
+    }
+
+    if(query.maxPrice){
+      queryBuilder.andWhere('products.price <= :maxPrice', {maxPrice: query.maxPrice});
+    }
+
+    if(query.minRating){
+      queryBuilder.andHaving('AVG(review.ratings) >= :minRating', {minRating: query.minRating});
+    }
+    if(query.maxRating){
+      queryBuilder.andHaving('AVG(review.ratings)<= :maxRating', {maxRating: query.maxRating});
+    }
+    queryBuilder.limit(limit);
+    if(query.offset){
+      queryBuilder.offset(query.offset);
+    }
+
+    const products = await queryBuilder.getRawMany();
+    return {products, totalProducts: filteredTotalProducts, limit};
   }
 
   async findOne(id: number): Promise<ProductEntity> {
