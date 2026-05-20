@@ -19,10 +19,13 @@ export class OrderEntity {
   shippedAt!: Date;
 
   @Column({nullable: true})
-  deliveredAt!: Date
+  deliveredAt!: Date 
+
+  @Column({nullable: true})
+  cancelledAt!: Date
 
   @ManyToOne(()=>UserEntity, user=>user.ordersUpdatedBy)
-  updatedBy!: number
+  updatedBy!: UserEntity
 
   @OneToOne(()=>ShippingEntity, shipping=>shipping.order, {cascade:true})
   @JoinColumn()
