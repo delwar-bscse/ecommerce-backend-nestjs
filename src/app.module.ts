@@ -7,9 +7,17 @@ import { CategoriesModule } from './categories/categories.module';
 import { ProductsModule } from './products/products.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { OrdersModule } from './orders/orders.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath:
+        process.env.NODE_ENV === 'docker'
+          ? '.env.docker'
+          : '.env.local',
+    }),
     TypeOrmModule.forRoot(dataSourceOptions),
      UsersModule,
      CategoriesModule,
