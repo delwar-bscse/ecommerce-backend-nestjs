@@ -48,43 +48,10 @@ export class ProductListDto {
   @Expose({ name: "products_categoryId" })
   categoryId!: number;
 
-  // @Transform(({ obj }) => {
-  //   return {
-  //     id: obj.category_id,
-  //     title: obj.category_title,
-  //     description: obj.category_description,
-  //     createdAt: obj.category_createdAt,
-  //     updatedAt: obj.category_updatedAt,
-  //     addedById: obj.category_addedById
-  //   };
-  // })
-  // @Expose()
-  // category!: any;
-
   @Expose({name: "reviewcount"})
   review!: number;   
 
   @Expose({name: "avgrating"})
   rating!: number;
-}
-
-export class ProductCategoryDto {
-  @Expose({ name: "category_id" })
-  id!: number;
-
-  @Expose({ name: "category_title" })
-  title!: string;
-
-  @Expose({ name: "category_description" })
-  description!: string;
-
-  @Expose({ name: "category_createdAt" })
-  createdAt!: Date;
-
-  @Expose({ name: "category_updatedAt" })
-  updatedAt!: Date;
-
-  @Expose({ name: "category_addedById" })
-  addedById!: number;
 }
 

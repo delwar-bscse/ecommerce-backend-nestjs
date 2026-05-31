@@ -3,7 +3,7 @@ import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { RoleGuard } from 'src/utility/guards/role.guard';
-import { RolesEnum } from 'src/utility/common/user-roles.enum';
+import { RolesEnum } from 'src/utility/enums/user-roles.enum';
 import { CurrentUser } from 'src/utility/decorators/current-user.decorator';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { CategoryEntity } from './entities/category.entity';

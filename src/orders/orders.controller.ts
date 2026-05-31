@@ -3,7 +3,7 @@ import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { CurrentUser } from 'src/utility/decorators/current-user.decorator';
-import { RolesEnum } from 'src/utility/common/user-roles.enum';
+import { RolesEnum } from 'src/utility/enums/user-roles.enum';
 import { RoleGuard } from 'src/utility/guards/role.guard';
 import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 

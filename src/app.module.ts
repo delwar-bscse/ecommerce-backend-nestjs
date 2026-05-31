@@ -14,17 +14,15 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath:
-        process.env.NODE_ENV === 'docker'
-          ? '.env.docker'
-          : '.env.local',
+        process.env.NODE_ENV === 'docker' ? '.env.docker' : '.env',
     }),
     TypeOrmModule.forRoot(dataSourceOptions),
-     UsersModule,
-     CategoriesModule,
-     ProductsModule,
-     ReviewsModule,
-     OrdersModule
-    ],
+    UsersModule,
+    CategoriesModule,
+    ProductsModule,
+    ReviewsModule,
+    OrdersModule,
+  ],
   controllers: [],
   providers: [],
 })
@@ -32,6 +30,6 @@ export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(CurrentUserMiddleware)
-      .forRoutes({path:'*', method: RequestMethod.ALL});
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }

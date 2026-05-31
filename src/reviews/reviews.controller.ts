@@ -4,7 +4,7 @@ import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { CurrentUser } from 'src/utility/decorators/current-user.decorator';
 import { UserEntity } from 'src/users/entities/user.entity';
-import { RolesEnum } from 'src/utility/common/user-roles.enum';
+import { RolesEnum } from 'src/utility/enums/user-roles.enum';
 import { RoleGuard } from 'src/utility/guards/role.guard';
 import { ReviewEntity } from './entities/review.entity';
 

@@ -3,7 +3,7 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { RoleGuard } from 'src/utility/guards/role.guard';
-import { RolesEnum } from 'src/utility/common/user-roles.enum';
+import { RolesEnum } from 'src/utility/enums/user-roles.enum';
 import { CurrentUser } from 'src/utility/decorators/current-user.decorator';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { ProductEntity } from './entities/product.entity';

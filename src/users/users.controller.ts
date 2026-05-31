@@ -8,7 +8,7 @@ import { UserSignInDto } from './dto/user-signin.dto';
 import { CurrentUser } from 'src/utility/decorators/current-user.decorator';
 import { AuthGuard } from 'src/utility/guards/auth.guard';
 import { Roles } from 'src/utility/decorators/roles.decorator';
-import { RolesEnum } from 'src/utility/common/user-roles.enum';
+import { RolesEnum } from 'src/utility/enums/user-roles.enum';
 import { RoleGuard } from 'src/utility/guards/role.guard';
 
 @Controller('users')
